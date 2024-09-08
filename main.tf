@@ -7,10 +7,9 @@ resource "google_cloud_run_service" "default" {
       containers {
         image = var.image
         resources {
-          # Minimal CPU and memory limits for cost savings
           limits = {
-            memory = var.memory      # Set to 128Mi for minimal cost
-            cpu    = var.cpu         # Set to 0.08 for minimal cost
+            memory = var.memory
+            cpu    = var.cpu
           }
         }
       }
@@ -25,14 +24,15 @@ resource "google_cloud_run_service" "default" {
   autogenerate_revision_name = true
 }
 
-# Scale down to zero instances when there are no requests
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  location    = var.region
-  project     = var.project_id
-  service     = google_cloud_run_service.default.name
-  policy_data = google_iam_policy.noauth.policy_data
+# Allow unauthenticated access to the Cloud Run service
+resource "google_cloud_run_service_iam_member" "noauth" {
+  service  = google_cloud_run_service.default.name
+  location = var.region
+  role     = "roles/run.invoker"
+  member   = "allUsers"  # This allows unauthenticated access
 }
 
+# Output the URL of the Cloud Run service
 output "cloud_run_url" {
   value = google_cloud_run_service.default.status[0].url
 }
