@@ -3,6 +3,12 @@ variable "app_name" {
   description = "Name of the Cloud Run application"
 }
 
+variable "env_vars" {
+  type        = map(string)
+  description = "Environment variables for the container"
+  default     = {}
+}
+
 variable "image" {
   type        = string
   description = "Docker image to deploy"

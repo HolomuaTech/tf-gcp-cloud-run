@@ -1,3 +1,5 @@
+# tf-gcp-cloud-run/main.tf
+
 resource "google_cloud_run_service" "default" {
   name     = var.app_name
   location = var.region
@@ -6,6 +8,16 @@ resource "google_cloud_run_service" "default" {
     spec {
       containers {
         image = var.image
+
+        # Add environment variables if any
+        dynamic "env" {
+          for_each = var.env_vars
+          content {
+            name  = env.key
+            value = env.value
+          }
+        }
+
         resources {
           limits = {
             memory = var.memory
