@@ -3,16 +3,10 @@ variable "app_name" {
   description = "Name of the Cloud Run application"
 }
 
-variable "env_vars" {
-  type        = map(string)
-  description = "Environment variables for the container"
-  default     = {}
-}
-
 variable "image" {
   type        = string
   description = "Docker image to deploy"
-  default     = "gcr.io/google-containers/nginx:latest"  # Default to public Nginx image
+  default     = "gcr.io/google-samples/hello-app:1.0"
 }
 
 variable "region" {
