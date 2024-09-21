@@ -6,6 +6,7 @@ variable "app_name" {
 variable "image" {
   type        = string
   description = "Docker image to deploy"
+  default     = "gcr.io/google-containers/nginx:latest"  # Default to public Nginx image
 }
 
 variable "region" {
