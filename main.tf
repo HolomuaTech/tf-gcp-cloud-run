@@ -25,6 +25,13 @@ resource "google_cloud_run_service" "default" {
   }
 
   autogenerate_revision_name = true
+
+  # Add lifecycle block to ignore changes to the image attribute
+  lifecycle {
+    ignore_changes = [
+      template[0].spec[0].containers[0].image,
+    ]
+  }
 }
 
 # Allow unauthenticated access to the Cloud Run service
