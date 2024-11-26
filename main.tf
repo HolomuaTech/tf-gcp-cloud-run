@@ -45,6 +45,15 @@ resource "google_cloud_run_service" "default" {
   }
 }
 
+# Create DNS record
+resource "google_dns_record_set" "cname_record" {
+  managed_zone = var.dns_zone_name
+  name         = "${var.cname_subdomain}.${var.dns_zone_name}."
+  type         = "CNAME"
+  ttl          = 300
+  rrdatas      = ["ghs.googlehosted.com."]
+}
+
 # Allow unauthenticated access to the Cloud Run service
 resource "google_cloud_run_service_iam_member" "noauth" {
   service  = google_cloud_run_service.default.name
@@ -57,4 +66,3 @@ resource "google_cloud_run_service_iam_member" "noauth" {
 output "cloud_run_url" {
   value = google_cloud_run_service.default.status[0].url
 }
-

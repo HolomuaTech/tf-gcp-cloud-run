@@ -41,3 +41,14 @@ variable "env_variable_name" {
   description = "Environment variable name for the secret in the container"
   default     = null
 }
+
+# DNS Info
+variable "dns_zone_name" {
+  type        = string
+  description = "Name of the DNS zone for creating the CNAME record"
+}
+
+variable "cname_subdomain" {
+  type        = string
+  description = "Subdomain for the Cloud Run service's DNS record"
+}
