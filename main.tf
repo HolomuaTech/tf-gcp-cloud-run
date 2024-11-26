@@ -48,7 +48,7 @@ resource "google_cloud_run_service" "default" {
 # Create DNS record
 resource "google_dns_record_set" "cname_record" {
   managed_zone = var.dns_zone_name
-  name         = "${var.cname_subdomain}.${var.dns_name}."
+  name         = "${var.cname_subdomain}.${var.dns_name}"
   type         = "CNAME"
   ttl          = 300
   rrdatas      = ["ghs.googlehosted.com."]
