@@ -45,7 +45,12 @@ variable "env_variable_name" {
 # DNS Info
 variable "dns_zone_name" {
   type        = string
-  description = "Name of the DNS zone for creating the CNAME record"
+  description = "Name of the GCP DNS zone resource for creating the CNAME record"
+}
+
+variable "dns_name" {
+  type        = string
+  description = "DNS domain name"
 }
 
 variable "cname_subdomain" {
