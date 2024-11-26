@@ -1,5 +1,3 @@
-# tf-gcp-cloud-run/main.tf
-
 resource "google_cloud_run_service" "default" {
   name     = var.app_name
   location = var.region
@@ -15,6 +13,20 @@ resource "google_cloud_run_service" "default" {
             cpu    = var.cpu
           }
         }
+
+        # Add environment variables if secrets are provided
+        dynamic "env" {
+          for_each = var.secret_name != null ? [var.secret_name] : []
+          content {
+            name  = "SECRET_KEY" # Environment variable key
+            value_from {
+              secret_key_ref {
+                secret = env.value
+                version = "latest" # Adjust versioning logic as needed
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -26,7 +38,6 @@ resource "google_cloud_run_service" "default" {
 
   autogenerate_revision_name = true
 
-  # Add lifecycle block to ignore changes to the image attribute
   lifecycle {
     ignore_changes = [
       template[0].spec[0].containers[0].image,
@@ -39,7 +50,7 @@ resource "google_cloud_run_service_iam_member" "noauth" {
   service  = google_cloud_run_service.default.name
   location = var.region
   role     = "roles/run.invoker"
-  member   = "allUsers"  # This allows unauthenticated access
+  member   = "allUsers"
 }
 
 # Output the URL of the Cloud Run service

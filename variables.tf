@@ -24,3 +24,8 @@ variable "cpu" {
   description = "CPU limit for the Cloud Run service"
 }
 
+variable "secret_name" {
+  type        = string
+  description = "Name of the Google Secret Manager secret to inject into the Cloud Run service"
+  default     = null
+}
