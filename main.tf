@@ -16,13 +16,13 @@ resource "google_cloud_run_service" "default" {
 
         # Add environment variables if secrets are provided
         dynamic "env" {
-          for_each = var.secret_name != null ? [var.secret_name] : []
+          for_each = var.secret_name != null && var.secret_key != null ? [1] : []
           content {
-            name  = "SECRET_KEY" # Environment variable key
+            name = var.env_variable_name
             value_from {
               secret_key_ref {
-                secret = env.value
-                version = "latest" # Adjust versioning logic as needed
+                name = var.secret_name
+                key  = var.secret_key
               }
             }
           }

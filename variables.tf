@@ -29,3 +29,15 @@ variable "secret_name" {
   description = "Name of the Google Secret Manager secret to inject into the Cloud Run service"
   default     = null
 }
+
+variable "secret_key" {
+  type        = string
+  description = "Key of the secret to use in the Cloud Run service"
+  default     = null
+}
+
+variable "env_variable_name" {
+  type        = string
+  description = "Environment variable name for the secret in the container"
+  default     = null
+}
