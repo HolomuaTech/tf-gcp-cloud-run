@@ -61,8 +61,3 @@ resource "google_cloud_run_service_iam_member" "noauth" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
-
-# Output the URL of the Cloud Run service
-output "cloud_run_url" {
-  value = google_cloud_run_service.default.status[0].url
-}
