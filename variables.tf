@@ -57,3 +57,15 @@ variable "cname_subdomain" {
   type        = string
   description = "Subdomain for the Cloud Run service's DNS record"
 }
+
+# Domain Mapping Info
+variable "domain_name" {
+  type        = string
+  description = "Fully qualified domain name for the Cloud Run service"
+}
+
+variable "project_number" {
+  type        = string
+  description = "GCP project number"
+}
+
