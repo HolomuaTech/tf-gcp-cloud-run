@@ -16,12 +16,12 @@ resource "google_cloud_run_service" "default" {
 
         # Add environment variables if secrets are provided
         dynamic "env" {
-          for_each = var.secret_name != null && var.secret_key != null ? [1] : []
+          for_each = [for name in [var.secret_name, var.postgres_secret_name] : name if name != null]
           content {
-            name = var.env_variable_name
+            name = var.secret_name == name ? var.env_variable_name : "POSTGRES_CONNECTION"
             value_from {
               secret_key_ref {
-                name = var.secret_name
+                name = name
                 key  = var.secret_key
               }
             }

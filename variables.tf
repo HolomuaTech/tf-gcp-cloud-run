@@ -69,3 +69,8 @@ variable "project_number" {
   description = "GCP project number"
 }
 
+variable "postgres_secret_name" {
+  type        = string
+  description = "The name of the Google Secret Manager secret storing PostgreSQL connection details"
+  default     = null
+}
