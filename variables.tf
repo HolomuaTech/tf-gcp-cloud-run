@@ -1,3 +1,8 @@
+variable "project_id" {
+  type        = string
+  description = "GCP Project ID"
+}
+
 variable "app_name" {
   type        = string
   description = "Name of the Cloud Run application"
@@ -12,6 +17,11 @@ variable "image" {
 variable "region" {
   type        = string
   description = "Region for Cloud Run"
+}
+
+variable "service_account_name" {
+  description = "Service account to use for Cloud Run"
+  type        = string
 }
 
 variable "memory" {
@@ -63,3 +73,8 @@ variable "project_number" {
   description = "GCP project number"
 }
 
+variable "service_account_email" {
+  type        = string
+  description = "Email of the service account to use with Cloud Run. If not provided, a new one will be created."
+  default     = null
+}
