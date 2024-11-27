@@ -24,22 +24,16 @@ variable "cpu" {
   description = "CPU limit for the Cloud Run service"
 }
 
-variable "secret_name" {
+variable "postgres_secret_name" {
   type        = string
-  description = "Name of the Google Secret Manager secret to inject into the Cloud Run service"
+  description = "The name of the Google Secret Manager secret storing PostgreSQL connection details"
   default     = null
 }
 
 variable "secret_key" {
   type        = string
   description = "Key of the secret to use in the Cloud Run service"
-  default     = null
-}
-
-variable "env_variable_name" {
-  type        = string
-  description = "Environment variable name for the secret in the container"
-  default     = null
+  default     = "latest"
 }
 
 # DNS Info
@@ -69,8 +63,3 @@ variable "project_number" {
   description = "GCP project number"
 }
 
-variable "postgres_secret_name" {
-  type        = string
-  description = "The name of the Google Secret Manager secret storing PostgreSQL connection details"
-  default     = null
-}

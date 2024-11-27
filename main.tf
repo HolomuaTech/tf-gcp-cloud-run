@@ -14,14 +14,14 @@ resource "google_cloud_run_service" "default" {
           }
         }
 
-        # Add environment variables if secrets are provided
+        # Add environment variable for the database connection
         dynamic "env" {
-          for_each = [for name in [var.secret_name, var.postgres_secret_name] : name if name != null]
+          for_each = var.postgres_secret_name != null ? [1] : []
           content {
-            name = var.secret_name == name ? var.env_variable_name : "POSTGRES_CONNECTION"
+            name = "POSTGRES_CONNECTION"
             value_from {
               secret_key_ref {
-                name = name
+                name = var.postgres_secret_name
                 key  = var.secret_key
               }
             }
