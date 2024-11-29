@@ -53,13 +53,13 @@ resource "google_cloud_run_service" "default" {
 
         # Add environment variables for PostgreSQL connection
         dynamic "env" {
-          for_each = [
+          for_each = var.postgres_secret_name != null ? [
             { name = "PGHOST", key = "hostname" },
             { name = "PGPORT", key = "port" },
             { name = "PGDATABASE", key = "database" },
             { name = "PGUSER", key = "username" },
             { name = "PGPASSWORD", key = "password" }
-          ]
+          ] : []
           content {
             name = env.value.name
             value_from {
@@ -87,7 +87,6 @@ resource "google_cloud_run_service" "default" {
     ]
   }
 }
-
 
 # Create DNS record
 resource "google_dns_record_set" "cname_record" {
