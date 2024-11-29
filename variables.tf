@@ -90,3 +90,8 @@ variable "artifact_registry_repo_location" {
   description = "The location of the Artifact Registry repository."
 }
 
+variable "secret_version" {
+  type        = string
+  description = "Version of the secret to use (defaults to 'latest')"
+  default     = "latest"
+}

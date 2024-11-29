@@ -31,7 +31,6 @@ resource "google_artifact_registry_repository_iam_member" "grant_artifact_access
   member      = "serviceAccount:${google_service_account.cloud_run_sa[0].email}"
 }
 
-# Cloud Run Service
 resource "google_cloud_run_service" "default" {
   name     = var.app_name
   location = var.region
