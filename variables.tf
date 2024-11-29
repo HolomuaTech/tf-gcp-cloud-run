@@ -78,3 +78,15 @@ variable "service_account_email" {
   description = "Email of the service account to use with Cloud Run. If not provided, a new one will be created."
   default     = null
 }
+
+# Artifact registry info. this is to grant access to the cloud run service account
+variable "artifact_registry_repo_name" {
+  type        = string
+  description = "The name of the Artifact Registry repository."
+}
+
+variable "artifact_registry_repo_location" {
+  type        = string
+  description = "The location of the Artifact Registry repository."
+}
+
