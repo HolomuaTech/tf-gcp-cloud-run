@@ -1,3 +1,15 @@
+### DEBUGGING
+locals {
+  postgres_env_vars = var.postgres_secret_name != null ? [
+    { name = "PGHOST", key = "hostname" },
+    { name = "PGPORT", key = "port" },
+    { name = "PGDATABASE", key = "database" },
+    { name = "PGUSER", key = "username" },
+    { name = "PGPASSWORD", key = "password" }
+  ] : []
+}
+### DEBUGGING
+
 # Create a Service Account for the Cloud Run service
 resource "google_service_account" "cloud_run_sa" {
   count        = var.service_account_email == null ? 1 : 0
