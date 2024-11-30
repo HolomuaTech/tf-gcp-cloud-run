@@ -77,9 +77,9 @@ resource "google_cloud_run_service" "default" {
             value_from {
               secret_key_ref {
                 # name    = var.postgres_secret_name
+                # key     = env.value.key
                 name    = "belay-dev-db-connection"
-                key     = env.value.key
-                version = "1"
+                key     = "latest"
               }
             }
           }
