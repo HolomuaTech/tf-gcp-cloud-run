@@ -51,32 +51,25 @@ resource "google_cloud_run_service" "default" {
           }
         }
 
-        # Hardcoded environment variables
-        env {
-          name  = "PGHOST"
-          value = "belay-api-db.holomuatech.online"
-        }
-        env {
-          name  = "PGPORT"
-          value = "5432"
-        }
-        env {
-          name  = "PGDATABASE"
-          value = "belay-dev"
-        }
-        env {
-          name  = "PGUSER"
-          value = "postgres"
+        # Public environment variables
+        dynamic "env" {
+          for_each = var.public_env_vars
+          content {
+            name  = env.key
+            value = env.value
+          }
         }
 
-        # Dynamically provisioned PostgreSQL password from Secret Manager
-        env {
-          name = "PGPASSWORD"
-          value_from {
-            secret_key_ref {
-              # name = var.postgres_secret_name
-              name = "belay-dev-pgpassword"
-              key  = "latest"
+        # Private (secret-backed) environment variables
+        dynamic "env" {
+          for_each = var.secret_env_vars
+          content {
+            name = env.key
+            value_from {
+              secret_key_ref {
+                name = env.value
+                key  = "latest"
+              }
             }
           }
         }
