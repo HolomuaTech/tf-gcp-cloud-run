@@ -51,23 +51,32 @@ resource "google_cloud_run_service" "default" {
           }
         }
 
-        # Add environment variables for PostgreSQL connection if the secret name is provided
-        dynamic "env" {
-          for_each = var.postgres_secret_name != null ? [
-            { name = "PGHOST", key = "hostname" },
-            { name = "PGPORT", key = "port" },
-            { name = "PGDATABASE", key = "database" },
-            { name = "PGUSER", key = "username" },
-            { name = "PGPASSWORD", key = "password" }
-          ] : []
-          content {
-            name = env.value.name
-            value_from {
-              secret_key_ref {
-                # name = var.postgres_secret_name
-                name = "projects/${var.project_id}/secrets/${var.postgres_secret_name}"
-                key  = env.value.key
-              }
+        # Hardcoded environment variables
+        env {
+          name  = "PGHOST"
+          value = "belay-api-db.holomuatech.online"
+        }
+        env {
+          name  = "PGPORT"
+          value = "5432"
+        }
+        env {
+          name  = "PGDATABASE"
+          value = "belay-dev"
+        }
+        env {
+          name  = "PGUSER"
+          value = "postgres"
+        }
+
+        # Dynamically provisioned PostgreSQL password from Secret Manager
+        env {
+          name = "PGPASSWORD"
+          value_from {
+            secret_key_ref {
+              # name = var.postgres_secret_name
+              name = "belay-dev-pgpassword"
+              key  = "latest"
             }
           }
         }
