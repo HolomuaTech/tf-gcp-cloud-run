@@ -102,7 +102,7 @@ variable "public_env_vars" {
   default     = {} # Default to empty map
 }   
     
-variable "private_env_vars" {
+variable "secret_env_vars" {
   description = "Private environment variables with key-value pairs of environment variable names and secret names."
   type        = map(string)
   default     = {} # Default to empty map
