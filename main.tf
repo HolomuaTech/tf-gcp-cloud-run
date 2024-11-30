@@ -64,7 +64,8 @@ resource "google_cloud_run_service" "default" {
             name = env.value.name
             value_from {
               secret_key_ref {
-                name    = var.postgres_secret_name
+                # name    = var.postgres_secret_name
+                name    = "projects/holomua-doe-demo/secrets/belay-dev-db-connection"
                 key     = env.value.key
               }
             }
