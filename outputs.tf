@@ -18,6 +18,3 @@ output "domain_mapping" {
   value = google_cloud_run_domain_mapping.domain_mapping.name
 }
 
-output "debug_postgres_env_vars" {
-  value = local.postgres_env_vars
-}
