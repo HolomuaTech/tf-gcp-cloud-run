@@ -95,3 +95,15 @@ variable "secret_version" {
   description = "Version of the secret to use (defaults to 'latest')"
   default     = "latest"
 }
+
+variable "public_env_vars" {
+  description = "Public environment variables as key-value pairs."
+  type        = map(string)
+  default     = {} # Default to empty map
+}   
+    
+variable "private_env_vars" {
+  description = "Private environment variables with key-value pairs of environment variable names and secret names."
+  type        = map(string)
+  default     = {} # Default to empty map
+}
