@@ -1,15 +1,3 @@
-### DEBUGGING
-locals {
-  postgres_env_vars = var.postgres_secret_name != null ? [
-    { name = "PGHOST", key = "hostname" },
-    { name = "PGPORT", key = "port" },
-    { name = "PGDATABASE", key = "database" },
-    { name = "PGUSER", key = "username" },
-    { name = "PGPASSWORD", key = "password" }
-  ] : []
-}
-### DEBUGGING
-
 # Create a Service Account for the Cloud Run service
 resource "google_service_account" "cloud_run_sa" {
   count        = var.service_account_email == null ? 1 : 0
@@ -76,9 +64,7 @@ resource "google_cloud_run_service" "default" {
             name = env.value.name
             value_from {
               secret_key_ref {
-                # name    = var.postgres_secret_name
-                # key     = env.value.key
-                name    = "belay-dev-db-connection"
+                name    = var.postgres_secret_name
                 key     = "latest"
               }
             }
