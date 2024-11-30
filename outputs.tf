@@ -10,11 +10,12 @@ output "cname_record" {
 }
 
 output "cloud_run_url" {
-  value = google_cloud_run_service.default.status[0].url
+  description = "Public URL for the Cloud Run service"
+  value       = google_cloud_run_service.default.status[0].url
 }
 
 output "domain_mapping" {
   description = "The Cloud Run domain mapping"
-  value = google_cloud_run_domain_mapping.domain_mapping.name
+  value       = google_cloud_run_domain_mapping.domain_mapping.name
 }
 
