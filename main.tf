@@ -51,49 +51,22 @@ resource "google_cloud_run_service" "default" {
           }
         }
 
-        # Add environment variables for PostgreSQL connection (hard-coded for debugging)
-        env {
-          name = "PGHOST"
-          value_from {
-            secret_key_ref {
-              name = "belay-dev-db-connection"
-              key  = "hostname"
-            }
-          }
-        }
-        env {
-          name = "PGPORT"
-          value_from {
-            secret_key_ref {
-              name = "belay-dev-db-connection"
-              key  = "port"
-            }
-          }
-        }
-        env {
-          name = "PGDATABASE"
-          value_from {
-            secret_key_ref {
-              name = "belay-dev-db-connection"
-              key  = "database"
-            }
-          }
-        }
-        env {
-          name = "PGUSER"
-          value_from {
-            secret_key_ref {
-              name = "belay-dev-db-connection"
-              key  = "username"
-            }
-          }
-        }
-        env {
-          name = "PGPASSWORD"
-          value_from {
-            secret_key_ref {
-              name = "belay-dev-db-connection"
-              key  = "password"
+        # Add environment variables for PostgreSQL connection if the secret name is provided
+        dynamic "env" {
+          for_each = var.postgres_secret_name != null ? [
+            { name = "PGHOST", key = "hostname" },
+            { name = "PGPORT", key = "port" },
+            { name = "PGDATABASE", key = "database" },
+            { name = "PGUSER", key = "username" },
+            { name = "PGPASSWORD", key = "password" }
+          ] : []
+          content {
+            name = env.value.name
+            value_from {
+              secret_key_ref {
+                name = var.postgres_secret_name
+                key  = env.value.key
+              }
             }
           }
         }
