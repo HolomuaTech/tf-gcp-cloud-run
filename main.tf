@@ -66,7 +66,6 @@ resource "google_cloud_run_service" "default" {
               secret_key_ref {
                 name    = var.postgres_secret_name
                 key     = env.value.key
-                version = var.secret_version # Use version passed from root module
               }
             }
           }
