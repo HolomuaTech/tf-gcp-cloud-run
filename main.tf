@@ -64,7 +64,8 @@ resource "google_cloud_run_service" "default" {
             name = env.value.name
             value_from {
               secret_key_ref {
-                name = var.postgres_secret_name
+                # name = var.postgres_secret_name
+                name = "projects/${var.project_id}/secrets/${var.postgres_secret_name}"
                 key  = env.value.key
               }
             }
