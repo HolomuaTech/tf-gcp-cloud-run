@@ -22,6 +22,7 @@ variable "region" {
 variable "service_account_name" {
   description = "Service account to use for Cloud Run"
   type        = string
+  default     = null
 }
 
 variable "memory" {
@@ -79,7 +80,7 @@ variable "service_account_email" {
   default     = null
 }
 
-# Artifact registry info. this is to grant access to the cloud run service account
+# Artifact registry info. This is to grant access to the cloud run service account
 variable "artifact_registry_repo_name" {
   type        = string
   description = "The name of the Artifact Registry repository."
@@ -100,10 +101,18 @@ variable "public_env_vars" {
   description = "Public environment variables as key-value pairs."
   type        = map(string)
   default     = {} # Default to empty map
-}   
-    
+}
+
 variable "secret_env_vars" {
   description = "Private environment variables with key-value pairs of environment variable names and secret names."
   type        = map(string)
   default     = {} # Default to empty map
 }
+
+# New variable to control Cloud SQL access
+variable "grant_cloudsql_access" {
+  type        = bool
+  description = "Whether to grant Cloud SQL client access to the service account"
+  default     = false
+}
+
