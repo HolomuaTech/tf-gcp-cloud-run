@@ -35,6 +35,18 @@ variable "cpu" {
   description = "CPU limit for the Cloud Run service"
 }
 
+variable "postgres_secret_name" {
+  type        = string
+  description = "The name of the Google Secret Manager secret storing PostgreSQL connection details"
+  default     = null
+}
+
+variable "secret_key" {
+  type        = string
+  description = "Key of the secret to use in the Cloud Run service"
+  default     = "latest"
+}
+
 # DNS Info
 variable "dns_zone_name" {
   type        = string
@@ -97,6 +109,7 @@ variable "secret_env_vars" {
   default     = {} # Default to empty map
 }
 
+# New variable to control Cloud SQL access
 variable "grant_cloudsql_access" {
   type        = bool
   description = "Whether to grant Cloud SQL client access to the service account"
