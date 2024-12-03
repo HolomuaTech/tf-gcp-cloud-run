@@ -1,13 +1,12 @@
-# Determine the service account email
-locals {
-  service_account_email = var.service_account_email != null ? var.service_account_email : google_service_account.cloud_run_sa[0].email
-}
-
 # Create a Service Account for the Cloud Run service
 resource "google_service_account" "cloud_run_sa" {
-  count        = var.service_account_email == null ? 1 : 0
   account_id   = "${var.app_name}-sa"
   display_name = "${var.app_name} Cloud Run Service Account"
+}
+
+# Define the service account email
+locals {
+  service_account_email = google_service_account.cloud_run_sa.email
 }
 
 # Grant Secret Manager Access to the Service Account
@@ -17,7 +16,7 @@ resource "google_project_iam_member" "grant_secret_access" {
   member  = "serviceAccount:${local.service_account_email}"
 }
 
-# Grant Access to Google Container Registry (gcr.io)
+# Grant Access to Artifact Registry
 resource "google_project_iam_member" "grant_gcr_access" {
   project = var.project_id
   role    = "roles/artifactregistry.reader"

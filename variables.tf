@@ -19,12 +19,6 @@ variable "region" {
   description = "Region for Cloud Run"
 }
 
-variable "service_account_name" {
-  description = "Service account to use for Cloud Run"
-  type        = string
-  default     = null
-}
-
 variable "memory" {
   type        = string
   description = "Memory limit for the Cloud Run service"
@@ -33,18 +27,6 @@ variable "memory" {
 variable "cpu" {
   type        = string
   description = "CPU limit for the Cloud Run service"
-}
-
-variable "postgres_secret_name" {
-  type        = string
-  description = "The name of the Google Secret Manager secret storing PostgreSQL connection details"
-  default     = null
-}
-
-variable "secret_key" {
-  type        = string
-  description = "Key of the secret to use in the Cloud Run service"
-  default     = "latest"
 }
 
 # DNS Info
@@ -74,13 +56,7 @@ variable "project_number" {
   description = "GCP project number"
 }
 
-variable "service_account_email" {
-  type        = string
-  description = "Email of the service account to use with Cloud Run. If not provided, a new one will be created."
-  default     = null
-}
-
-# Artifact registry info. This is to grant access to the cloud run service account
+# Artifact Registry info
 variable "artifact_registry_repo_name" {
   type        = string
   description = "The name of the Artifact Registry repository."
@@ -100,16 +76,16 @@ variable "secret_version" {
 variable "public_env_vars" {
   description = "Public environment variables as key-value pairs."
   type        = map(string)
-  default     = {} # Default to empty map
+  default     = {}
 }
 
 variable "secret_env_vars" {
   description = "Private environment variables with key-value pairs of environment variable names and secret names."
   type        = map(string)
-  default     = {} # Default to empty map
+  default     = {}
 }
 
-# New variable to control Cloud SQL access
+# Variable to control Cloud SQL access
 variable "grant_cloudsql_access" {
   type        = bool
   description = "Whether to grant Cloud SQL client access to the service account"

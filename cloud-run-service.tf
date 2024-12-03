@@ -5,8 +5,8 @@ resource "google_cloud_run_service" "default" {
 
   template {
     spec {
-      # Use the service account if provided, otherwise use the one created above
-      service_account_name = var.service_account_email != null ? var.service_account_email : google_service_account.cloud_run_sa[0].email
+      # Use the service account created by the module
+      service_account_name = google_service_account.cloud_run_sa.email
 
       containers {
         image = var.image
