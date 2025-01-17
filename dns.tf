@@ -1,10 +1,14 @@
-# Create DNS record
+# Create DNS record dynamically
 resource "google_dns_record_set" "cname_record" {
   managed_zone = var.dns_zone_name
-  name         = "${var.cname_subdomain}.${var.dns_name}"
+  name         = "${var.cname_subdomain}.${var.dns_name}."
   type         = "CNAME"
   ttl          = 300
-  rrdatas      = ["ghs.googlehosted.com."]
+
+  # Use the domain name dynamically
+  rrdatas = [google_cloud_run_domain_mapping.domain_mapping.spec[0].route_name]
+  
+  depends_on = [google_cloud_run_domain_mapping.domain_mapping]
 }
 
 # Create Cloud Run domain mapping
