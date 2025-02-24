@@ -6,6 +6,20 @@ resource "google_project_service" "cloud_run_api" {
   disable_on_destroy = false
 }
 
+# Get project data for service account
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+# Grant Artifact Registry reader permission in shared project for Cloud Run service agent
+resource "google_project_iam_member" "shared_project_permissions" {
+  count = var.shared_artifact_registry_project != "" ? 1 : 0
+
+  project = var.shared_artifact_registry_project
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:service-${data.google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
 # Create Cloud Run service
 resource "google_cloud_run_service" "service" {
   name     = var.service_name
@@ -14,8 +28,17 @@ resource "google_cloud_run_service" "service" {
 
   template {
     spec {
+      container_concurrency = var.container_concurrency
+      
       containers {
         image = var.image
+        
+        resources {
+          limits = {
+            cpu    = var.cpu
+            memory = var.memory
+          }
+        }
       }
     }
   }

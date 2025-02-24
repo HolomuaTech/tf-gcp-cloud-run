@@ -24,6 +24,30 @@ variable "image" {
   type        = string
 }
 
+variable "shared_artifact_registry_project" {
+  description = "The GCP Project ID where the shared Artifact Registry exists"
+  type        = string
+  default     = ""
+}
+
+variable "cpu" {
+  description = "Number of CPU units for the service (e.g., '1000m' for 1 vCPU)"
+  type        = string
+  default     = "1000m"  # Default to 1 vCPU
+}
+
+variable "memory" {
+  description = "Memory allocation for the service (e.g., '512Mi', '1Gi')"
+  type        = string
+  default     = "512Mi"  # Default to 512MB
+}
+
+variable "container_concurrency" {
+  description = "Maximum number of concurrent requests per container (1-80, default 80)"
+  type        = number
+  default     = 80
+}
+
 variable "domain_mapping" {
   description = "Whether to map a domain to this Cloud Run service"
   type        = bool
