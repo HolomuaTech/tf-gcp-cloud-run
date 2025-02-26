@@ -33,13 +33,13 @@ variable "shared_artifact_registry_project" {
 variable "cpu" {
   description = "Number of CPU units for the service (e.g., '1000m' for 1 vCPU)"
   type        = string
-  default     = "1000m"  # Default to 1 vCPU
+  default     = "1000m" # Default to 1 vCPU
 }
 
 variable "memory" {
   description = "Memory allocation for the service (e.g., '512Mi', '1Gi')"
   type        = string
-  default     = "512Mi"  # Default to 512MB
+  default     = "512Mi" # Default to 512MB
 }
 
 variable "container_concurrency" {
@@ -68,4 +68,13 @@ variable "dns_project_id" {
 variable "dns_zone_name" {
   description = "The name of the DNS zone in the shared project"
   type        = string
+}
+
+variable "environment_secrets" {
+  description = "Map of environment variable names to secret references"
+  type = map(object({
+    secret_name = string
+    secret_key  = string
+  }))
+  default = {}
 } 

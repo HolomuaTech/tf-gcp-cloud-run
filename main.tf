@@ -11,6 +11,13 @@ data "google_project" "project" {
   project_id = var.project_id
 }
 
+# Grant Cloud Run Service Agent role
+resource "google_project_iam_member" "cloud_run_service_agent" {
+  project = var.project_id
+  role    = "roles/run.serviceAgent"
+  member  = "serviceAccount:service-${data.google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
 # Grant Artifact Registry reader permission in shared project for Cloud Run service agent
 resource "google_project_iam_member" "shared_project_permissions" {
   count = var.shared_artifact_registry_project != "" ? 1 : 0
@@ -26,13 +33,33 @@ resource "google_cloud_run_service" "service" {
   location = var.region
   project  = var.project_id
 
+  metadata {
+    annotations = {
+      "run.googleapis.com/ingress" = "all"  # Allow unauthenticated access
+    }
+  }
+
   template {
     spec {
       container_concurrency = var.container_concurrency
-      
+
       containers {
         image = var.image
-        
+
+        # Add environment variables from secrets
+        dynamic "env" {
+          for_each = var.environment_secrets
+          content {
+            name = env.key
+            value_from {
+              secret_key_ref {
+                name = env.value.secret_name
+                key  = env.value.secret_key
+              }
+            }
+          }
+        }
+
         resources {
           limits = {
             cpu    = var.cpu
