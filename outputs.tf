@@ -1,19 +1,27 @@
-output "service_name" {
-  description = "Name of the Cloud Run service"
-  value       = google_cloud_run_service.service.name
+output "service_names" {
+  description = "Map of service keys to service names"
+  value       = {
+    for k, v in google_cloud_run_service.services : k => v.name
+  }
 }
 
-output "service_url" {
-  description = "URL of the Cloud Run service"
-  value       = google_cloud_run_service.service.status[0].url
+output "service_urls" {
+  description = "Map of service keys to service URLs"
+  value       = {
+    for k, v in google_cloud_run_service.services : k => v.status[0].url
+  }
 }
 
-output "service_id" {
-  description = "Unique identifier for the Cloud Run service"
-  value       = google_cloud_run_service.service.id
+output "service_ids" {
+  description = "Map of service keys to service IDs"
+  value       = {
+    for k, v in google_cloud_run_service.services : k => v.id
+  }
 }
 
 output "domain_mapping_records" {
-  description = "DNS records required for domain mapping"
-  value       = var.domain_mapping ? google_cloud_run_domain_mapping.domain_mapping[0].status[0].resource_records : []
+  description = "Map of service keys to domain mapping records"
+  value       = {
+    for k, v in google_cloud_run_domain_mapping.domain_mapping : k => v.status[0].resource_records
+  }
 } 

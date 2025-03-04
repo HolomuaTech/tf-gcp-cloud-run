@@ -8,9 +8,24 @@ variable "region" {
   type        = string
 }
 
-variable "service_name" {
-  description = "Name of the Cloud Run service"
-  type        = string
+variable "services" {
+  description = "Map of Cloud Run services to create"
+  type = map(object({
+    name               = string
+    image              = optional(string)
+    cpu                = optional(string, "100m")
+    memory             = optional(string, "128Mi")
+    container_concurrency = optional(number, 80)
+    domain_mapping     = optional(bool, false)
+    domain_name        = optional(string, "")
+    environment_variables = optional(map(string), {})
+    environment_secrets = optional(map(object({
+      secret_name = string
+      secret_key  = string
+    })), {})
+    labels             = optional(map(string), {})
+    service_account_name = optional(string)
+  }))
 }
 
 variable "labels" {
@@ -19,45 +34,10 @@ variable "labels" {
   default     = {}
 }
 
-variable "image" {
-  description = "Container image to deploy"
-  type        = string
-}
-
 variable "shared_artifact_registry_project" {
   description = "The GCP Project ID where the shared Artifact Registry exists"
   type        = string
   default     = ""
-}
-
-variable "cpu" {
-  description = "Number of CPU units for the service (e.g., '1000m' for 1 vCPU)"
-  type        = string
-  default     = "1000m" # Default to 1 vCPU
-}
-
-variable "memory" {
-  description = "Memory allocation for the service (e.g., '512Mi', '1Gi')"
-  type        = string
-  default     = "512Mi" # Default to 512MB
-}
-
-variable "container_concurrency" {
-  description = "Maximum number of concurrent requests per container (1-80, default 80)"
-  type        = number
-  default     = 80
-}
-
-variable "domain_mapping" {
-  description = "Whether to map a domain to this Cloud Run service"
-  type        = bool
-  default     = false
-}
-
-variable "domain_name" {
-  description = "The domain name to map to the Cloud Run service"
-  type        = string
-  default     = null
 }
 
 variable "dns_project_id" {
@@ -77,4 +57,27 @@ variable "environment_secrets" {
     secret_key  = string
   }))
   default = {}
+}
+
+variable "default_service_account_email" {
+  description = "Default service account email to use for Cloud Run services"
+  type        = string
+  default     = ""
+}
+
+variable "environment" {
+  description = "Environment name (e.g., dev, prod)"
+  type        = string
+}
+
+variable "database_config" {
+  description = "Database configuration for services that need it"
+  type = object({
+    enabled = bool
+    secret_name_prefix = string
+  })
+  default = {
+    enabled = false
+    secret_name_prefix = ""
+  }
 } 
